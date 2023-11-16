@@ -37,7 +37,7 @@ region_mask = np.array(False).repeat(grid_size)
 
 intensity_list = []
 for _ in range(1):
-    intensity, mat_intensity = run_nystrom_2d(x_grid, y_grid, location, 8, gamma, 4000) # kernel (1, 50, 0.01)
+    intensity, mat_intensity = run_nystrom_2d(x_grid, y_grid, location, 8, gamma, 4000)
     intensity_list.append(intensity)
 intensity_avg = np.average(intensity_list, axis=0)
 intensity_avg = np.array([0.0001 if i < 0 else i for i in intensity_avg])

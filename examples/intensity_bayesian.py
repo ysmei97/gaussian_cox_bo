@@ -40,7 +40,7 @@ a = 0.04
 step = 40
 obs_hist = []
 region_center = np.array([25.0, 60.0])
-region_mask = np.array(False).repeat(grid_size)  # for computing variance, give 0 to positions outside obs regions
+region_mask = np.array(False).repeat(grid_size)
 
 time = 0
 

@@ -42,7 +42,7 @@ def load_crime_data():
             _date = datetime.strptime(date[i], '%Y/%m/%d %H:%M:%S+00')
             if _date.month in [5, 6]:  # select month
                 if _date.day <= 31:  # select day
-                    time.append((_date.month - 5) * 30 + (_date.day - 1) + (_date.hour * 3600 + _date.minute * 60 + _date.second) / day_seconds)  # need to align with month
+                    time.append((_date.month - 5) * 30 + (_date.day - 1) + (_date.hour * 3600 + _date.minute * 60 + _date.second) / day_seconds)
                     continue
             location = location.drop(i, axis=0)
         arr_time = np.sort(np.array(time))
@@ -69,8 +69,8 @@ def load_taxi_data():
         taxi_df['START_LAT'] = np.array(lat)
         latitude = (taxi_df['START_LON'] >= -8.63) & (taxi_df['START_LON'] <= -8.60)
         longitude = (taxi_df['START_LAT'] >= 41.15) & (taxi_df['START_LAT'] <= 41.18)
-        taxi_df = taxi_df[latitude & longitude]  # truncated coordinates
-        arr_time = (taxi_df['TIMESTAMP'] - 1372636800) / 3600  # unix time stamp in sec: 2013/7/1 00:00:00 GMT
+        taxi_df = taxi_df[latitude & longitude]
+        arr_time = (taxi_df['TIMESTAMP'] - 1372636800) / 3600
         location = taxi_df[['START_LON', 'START_LAT']].reset_index(drop=True)
         location['intensity'] = 0
     return arr_time.to_numpy(dtype='float'), len(arr_time), location

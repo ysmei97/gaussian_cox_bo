@@ -16,13 +16,9 @@ K = RBFKernel()
 
 def grf_predict(grid, obs, intensity, region_mask, grid_value_ratio, link_func_inv, link_func, link_func_grad_1, link_func_grad_2):
     """
-    Compute the mean of the input gaussian random function: g_mean(x) = kappa^{-1}(f^2), and
-    Compute the variance of the posterior: inv_A
     :param grid: column vector grid
     :param obs: column vector observation
     :param intensity:
-    :param region_min:
-    :param region_max:
     :param grid_value_ratio:
     :param link_func_inv: kappa inverse
     :param link_func: kappa
@@ -153,18 +149,6 @@ class BayesianOptimizer:
         self.kappa_grad_2 = lambda g: 2
 
     def select_next_region(self, grid_min, grid_max, grid_value_ratio, region_center, region_rad, mean, std, intensity):
-        """
-        obtain the next region to observe
-        :param grid_min:
-        :param grid_max:
-        :param grid_value_ratio:
-        :param region_center: center of each region, numpy array list
-        :param region_rad: radius of each region, region_rad = int(region_len / 2)
-        :param mean: predicted intensity in the grid
-        :param std:
-        :param intensity: predicted intensity in the region
-        :return:
-        """
         acquisition_value = self.acquisition_function(mean, std, grid_max, region_rad, grid_value_ratio)
         for i in range(int(4 * region_rad * grid_value_ratio)):
             region_i = (region_center - 2 * region_rad) * grid_value_ratio + i
@@ -177,16 +161,6 @@ class BayesianOptimizer:
         return region_center, acquisition_value
 
     def update_model(self, grid, obs_hist, region_mask, grid_value_ratio, a, gamma):
-        """
-        Update the gaussian RKHS model for the next prediction
-        :param grid_value_ratio:
-        :param region_mask:
-        :param grid:
-        :param obs_hist: list
-        :param a:
-        :param gamma:
-        :return:
-        """
         intensity_list = []
         for _ in range(10):
             intensity_list.append(run_nystrom(grid, np.array(obs_hist), a, gamma))
@@ -207,16 +181,6 @@ class BayesianOptimizer:
 
 
 def observe_arr_in_region(grid_min, grid_max, region_center, region_mask, region_rad, arr, obs_hist):
-    """
-    Update the observed arrivals for new region
-    :param grid_min:
-    :param grid_max:
-    :param region_rad:
-    :param region_center:
-    :param arr: absolute value
-    :param obs_hist: observation history, absolute value, list
-    :return:
-    """
     new_region_center = region_center[-1]
     new_region_min = new_region_center - region_rad if new_region_center - region_rad > grid_min else grid_min
     new_region_max = new_region_center + region_rad if new_region_center + region_rad < grid_max else grid_max
@@ -228,16 +192,6 @@ def observe_arr_in_region(grid_min, grid_max, region_center, region_mask, region
 
 
 def init_observation(grid_min, grid_max, region_center, region_mask, region_rad, arr, obs_hist):
-    """
-    Initialize the observation at step one
-    :param grid_min:
-    :param grid_max:
-    :param region_center:
-    :param region_rad:
-    :param arr:
-    :param obs_hist:
-    :return:
-    """
     init_region_num = len(region_center)
     for i in range(init_region_num):
         init_region_min = region_center[i] - region_rad if region_center[i] - region_rad > grid_min else grid_min

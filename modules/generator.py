@@ -24,7 +24,7 @@ def gt_intensity(grid, k, a):
 
 
 def poisson_obs(intensity_max, time_max, time_min=0):
-    obs_size = poisson.rvs(intensity_max)  # Random Poisson experiment, default size=1
+    obs_size = poisson.rvs(intensity_max)
     obs_time = uniform.rvs(time_min, time_max, obs_size)
     obs_time.sort()
     return obs_time, obs_size
